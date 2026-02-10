@@ -92,7 +92,7 @@ jobs:
             --volname "Bookkeeping" \
             --app-drop-link 100 200 \
             "build/macos/archRelease/bookkeeping.app" \
-            --output-dir build/macos/dmg
+            "build/macos/dmg/Bookkeeping.dmg"
 
       - name: Upload DMG
         uses: softprops/action-gh-release@v2
