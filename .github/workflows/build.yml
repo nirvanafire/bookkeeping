@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -31,9 +29,6 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
 
-      - name: Build iOS IPA
-        run: flutter build ipa --release
-
       - name: Build macOS App
         run: flutter build macos --release
 
@@ -44,12 +39,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
-        if: startsWith(github.ref, 'refs/tags/v')
-
-      - name: Upload iOS IPA
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/ios/ipa/*.ipa
         if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Upload macOS App
