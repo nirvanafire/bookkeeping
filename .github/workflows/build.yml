@@ -2,6 +2,8 @@ name: Build & Release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
 
@@ -9,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-android-windows:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,9 +31,6 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
 
-      - name: Build macOS App
-        run: flutter build macos --release
-
       - name: Build Windows Exe
         run: flutter build windows --release
 
@@ -41,14 +40,45 @@ jobs:
           files: build/app/outputs/flutter-apk/app-release.apk
         if: startsWith(github.ref, 'refs/tags/v')
 
-      - name: Upload macOS App
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/macos/archRelease/*.app
-        if: startsWith(github.ref, 'refs/tags/v')
-
       - name: Upload Windows Exe
         uses: softprops/action-gh-release@v2
         with:
           files: build/windows/runner/Release/*.exe
+        if: startsWith(github.ref, 'refs/tags/v')
+
+  build-macos:
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.0'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate Drift database
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Build macOS App
+        run: flutter build macos --release
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Create DMG
+        run: |
+          create-dmg \
+            --volname "Bookkeeping" \
+            --app-drop-link 100 200 \
+            "build/macos/archRelease/bookkeeping.app" \
+            --output-dir build/macos/dmg
+
+      - name: Upload DMG
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/macos/dmg/*.dmg
         if: startsWith(github.ref, 'refs/tags/v')
