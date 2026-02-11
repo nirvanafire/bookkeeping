@@ -1,0 +1,57 @@
+name: Build macOS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.0'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate Drift database
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Build macOS App
+        run: flutter build macos --release
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Create DMG output directory
+        run: mkdir -p build/macos/dmg
+
+      - name: Create DMG
+        run: |
+          APP_NAME="bookkeeping"
+          BUILD_DIR="build/macos/archRelease"
+          DMG_NAME="${APP_NAME}.dmg"
+
+          create-dmg \
+            --volname "$APP_NAME Installer" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "$APP_NAME.app" 175 120 \
+            --hide-extension "$APP_NAME.app" \
+            --app-drop-link 425 120 \
+            "$DMG_NAME" "$BUILD_DIR"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-dmg
+          path: "*.dmg"
+          retention-days: 1

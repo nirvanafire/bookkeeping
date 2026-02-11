@@ -1,0 +1,53 @@
+name: Build All Platforms
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    uses: ./.github/workflows/build-android.yml
+
+  build-windows:
+    uses: ./.github/workflows/build-windows.yml
+
+  build-macos:
+    uses: ./.github/workflows/build-macos.yml
+
+  release:
+    needs: [build-android, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: release/android
+
+      - name: Download Windows Exe
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-exe
+          path: release/windows
+
+      - name: Download macOS DMG
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-dmg
+          path: release/macos
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/android/*.apk
+            release/windows/*.exe
+            release/macos/*.dmg
+          generate_release_notes: true
