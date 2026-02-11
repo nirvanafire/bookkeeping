@@ -1,10 +1,7 @@
-name: Build macOS
+name: Build macOS DMG
 
 on:
   workflow_dispatch:
-
-permissions:
-  contents: read
 
 jobs:
   build:
@@ -13,42 +10,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.38.9'
+          channel: stable
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      # CocoaPods is required for macOS builds, and we need to update the repo to ensure we have the latest podspecs.
+      # Ruby fix (VERY IMPORTANT)
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: '3.2'
 
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods -N
           pod repo update
 
-      - name: Generate Drift database
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Flutter pub get
+        run: flutter pub get
 
-      - name: Build macOS App
-        run: flutter build macos --release
+      # ⚠️ 建议本地生成，不建议 CI
+      # - name: Generate Drift database
+      #   run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Build macOS
+        run: |
+          flutter clean
+          flutter build macos --release --universal
 
       - name: Install create-dmg
         run: brew install create-dmg
 
-      - name: Create DMG output directory
-        run: mkdir -p build/macos/dmg
-
       - name: Build DMG
         run: |
           APP_NAME="Bookkeeping"
-          BUILD_DIR="build/macos/archRelease"
-          DMG_NAME="${APP_NAME}.dmg"
+          BUILD_DIR="build/macos/Build/Products/Release"
+          OUTPUT_DIR="build/macos/dmg"
+          mkdir -p "$OUTPUT_DIR"
 
           create-dmg \
             --volname "$APP_NAME Installer" \
@@ -58,11 +58,10 @@ jobs:
             --icon "$APP_NAME.app" 175 120 \
             --hide-extension "$APP_NAME.app" \
             --app-drop-link 425 120 \
-            "$DMG_NAME" "$BUILD_DIR"
+            "$OUTPUT_DIR/$APP_NAME.dmg" "$BUILD_DIR"
 
       - name: Upload DMG
         uses: actions/upload-artifact@v4
         with:
           name: macos-dmg
-          path: "*.dmg"
-          retention-days: 1
+          path: build/macos/dmg/*.dmg
