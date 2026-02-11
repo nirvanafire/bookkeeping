@@ -43,6 +43,12 @@ jobs:
           name: macos-dmg
           path: release/macos
 
+      - name: Verify Artifacts
+        run: |
+          echo "=== Android APK ===" && ls -la release/android/ || echo "No Android APK found"
+          echo "=== Windows EXE ===" && ls -la release/windows/ || echo "No Windows EXE found"
+          echo "=== macOS DMG ===" && ls -la release/macos/ || echo "No macOS DMG found"
+
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
@@ -51,3 +57,4 @@ jobs:
             release/windows/*.exe
             release/macos/*.dmg
           generate_release_notes: true
+          fail_on_unmatched_files: true
