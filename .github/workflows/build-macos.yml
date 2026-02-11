@@ -17,12 +17,34 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: stable
+          cache: true
+          cache-dependency-path: |
+            pubspec.lock
+            **/pubspec.yaml
 
       # Ruby fix (VERY IMPORTANT)
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
+
+      - name: Cache CocoaPods and Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            ~/Library/Caches/RubyGems
+          key: ${{ runner.os }}-cocoapods-ruby-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cocoapods-ruby-
+
+      - name: Cache pub-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
 
       - name: Install CocoaPods
         run: |
