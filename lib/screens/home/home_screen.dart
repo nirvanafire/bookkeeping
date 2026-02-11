@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: gradientColors[0].withValues(alpha: 0.3),
+            color: gradientColors[0].withAlpha(76),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -272,13 +272,13 @@ class _HomeScreenState extends State<HomeScreen> {
               Icon(
                 icon,
                 size: 16,
-                color: Colors.white.withValues(alpha: 0.9),
+                color: Colors.white.withAlpha(230),
               ),
               const SizedBox(width: 4),
               Text(
                 isBalance && amount < 0 ? '超支' : label,
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Colors.white.withAlpha(230),
                   fontSize: 13,
                 ),
               ),
