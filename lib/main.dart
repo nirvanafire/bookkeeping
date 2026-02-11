@@ -62,15 +62,15 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   final List<BottomNavItem> _navItems = [
-    BottomNavItem(
+    const BottomNavItem(
       icon: Icons.edit_note,
       label: '记账',
     ),
-    BottomNavItem(
+    const BottomNavItem(
       icon: Icons.bar_chart,
       label: '统计',
     ),
-    BottomNavItem(
+    const BottomNavItem(
       icon: Icons.person,
       label: '我的',
     ),

@@ -42,9 +42,9 @@ post_install do |installer|
     # 抑制 SQLite 源码警告
     if target.name == 'sqlite3'
       target.build_configurations.each do |config|
-        config.build_settings['OTHER_CPLUSPLUSFLAGS'] ||= config.build_settings['OTHER_CPLUSPLUSFLAGS']
+        config.build_settings['OTHER_CPLUSPLUSFLAGS'] ||= ''
         config.build_settings['OTHER_CPLUSPLUSFLAGS'] += ' -w'
-        config.build_settings['OTHER_CFLAGS'] ||= config.build_settings['OTHER_CFLAGS']
+        config.build_settings['OTHER_CFLAGS'] ||= ''
         config.build_settings['OTHER_CFLAGS'] += ' -w'
       end
     end

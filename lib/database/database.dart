@@ -17,17 +17,17 @@ class TransactionData extends Table {
 
 @DriftDatabase(tables: [TransactionData])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase.connect(QueryExecutor e) : super(e);
+  AppDatabase.connect(super.e);
 
   factory AppDatabase() {
-    return AppDatabase.connect(_NativeConnection());
+    return AppDatabase.connect(_nativeConnection());
   }
 
   @override
   int get schemaVersion => 1;
 }
 
-QueryExecutor _NativeConnection() {
+QueryExecutor _nativeConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'bookkeeping.db'));

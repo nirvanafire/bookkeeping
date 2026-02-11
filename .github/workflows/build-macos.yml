@@ -14,7 +14,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.9'
+          flutter-version: '3.24.0'
           channel: stable
 
       # Ruby fix (VERY IMPORTANT)
@@ -38,7 +38,7 @@ jobs:
       - name: Build macOS
         run: |
           flutter clean
-          flutter build macos --release --universal
+          flutter build macos --release
 
       - name: Install create-dmg
         run: brew install create-dmg

@@ -42,15 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final provider = context.read<TransactionProvider>();
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const AddTransactionScreen(),
             ),
-          ).then((_) {
-            context.read<TransactionProvider>().loadTransactions();
-          });
+          );
+          if (mounted) {
+            provider.loadTransactions();
+          }
         },
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
@@ -144,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          PopupMenuDivider(),
+          const PopupMenuDivider(),
           PopupMenuItem(
             value: DateTime(0),
             child: Container(
