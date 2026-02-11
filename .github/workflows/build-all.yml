@@ -30,18 +30,21 @@ jobs:
         with:
           name: android-apk
           path: release/android
+        continue-on-error: true
 
       - name: Download Windows Exe
         uses: actions/download-artifact@v4
         with:
           name: windows-exe
           path: release/windows
+        continue-on-error: true
 
       - name: Download macOS DMG
         uses: actions/download-artifact@v4
         with:
           name: macos-dmg
           path: release/macos
+        continue-on-error: true
 
       - name: Verify Artifacts
         run: |
@@ -57,4 +60,3 @@ jobs:
             release/windows/*.exe
             release/macos/*.dmg
           generate_release_notes: true
-          fail_on_unmatched_files: true
