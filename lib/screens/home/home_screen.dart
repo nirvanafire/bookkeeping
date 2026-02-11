@@ -379,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: dayTotal >= 0 ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
+                      color: dayTotal >= 0 ? Colors.green.withAlpha(25) : Colors.red.withAlpha(25),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(

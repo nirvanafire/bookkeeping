@@ -35,7 +35,7 @@ class ProfileScreen extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: Colors.blue.withValues(alpha: 0.1),
+              color: Colors.blue.withAlpha(25),
               borderRadius: BorderRadius.circular(32),
             ),
             child: const Icon(
@@ -83,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.3),
+            color: Colors.blue.withAlpha(76),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -127,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.9),
+            color: Colors.white.withAlpha(230),
             fontSize: 13,
           ),
         ),
@@ -152,7 +152,7 @@ class ProfileScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: Colors.grey.withAlpha(25),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
