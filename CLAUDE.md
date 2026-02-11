@@ -61,7 +61,7 @@ lib/
 ├── screens/
 │   ├── home/              # 交易列表、月度汇总
 │   ├── add/               # 添加/编辑交易表单
-│   ├── statistics/         # 使用 fl_chart 的图表
+│   ├── statistics/        # 使用 fl_chart 的图表
 │   └── profile/           # 用户设置（语言、货币、数据导出）
 └── widgets/
     └── transaction_card.dart  # 可复用的交易显示卡片
