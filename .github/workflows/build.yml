@@ -86,6 +86,9 @@ jobs:
       - name: Install create-dmg
         run: brew install create-dmg
 
+      - name: Create DMG output directory
+        run: mkdir -p build/macos/dmg
+
       - name: Create DMG
         run: |
           create-dmg \
